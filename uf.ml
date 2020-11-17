@@ -136,30 +136,7 @@ let printerComposanteEnfants compo =
   done;
   print_string "fin\n"
 
-
-  (* CASE ADJACENTE V1 avec un générateur, chaque case a son numéro
-  int -> int -> (int,int,int) -> (int,int) *)
-let suivant =
-  let n = ref (-1) in
-  fun () -> n:= !n + 1 ; !n
-let laby x y = Array.make 2 (Array.init x (fun j -> Array.init y (fun i -> suivant() mod (x*y))))
-
-let case_adjacentes l h (d,x,y) = 
-  let laby_folie = laby l h in
-match (d,x,y) with 
-| (w,_,_) when w  = 0 -> if x >= (l-1) then invalid_arg "limite du labyrinthe" else (laby_folie.(w).(x).(y), laby_folie.(w).(x+1).(y))
-| (w,_,_) -> if y >= (h-1) then invalid_arg "limite du labyrinthe" else (laby_folie.(w).(x).(y), laby_folie.(w).(x).(y+1))
-
-
-(* CASE ADJACENTES V2 l'algo calcule la position comme demande le prof
- int -> int -> (int,int,int) -> (int,int) *)
-let case_adjacentesbis l h (d,x,y) = 
-  match (d,x,y) with 
-  | (w,x,y) when w  = 0 -> if x >= (l-1) then invalid_arg "limite du labyrinthe" else (y+l*x, y+l*(x+1))
-  | (w,_,_) -> if y >= (h-1) then invalid_arg "limite du labyrinthe" else (y+l*x, (y+1)+l*x)
-
-
-(* --------------------------------Partie Tests-------------------------------- *)
+(* --------------------------------Partie Tests-------------------------------- 
 
 let testCreate = create 10
 let compo1 = {racine = 0; enfants = [|1;2;3|]}  
@@ -182,6 +159,4 @@ let test1 =  printerUF testCreate
 let test2 =  print_int testFind4
 let test3 =  printerUF testUnion2
 
-(*meme resultat obtenu de 2 manières *)
-let ca = case_adjacentes 5 5 (1,4,4) (* OK *)
-let caca = case_adjacentesbis 5 5 (1,4,4) (* OK *)
+*)
