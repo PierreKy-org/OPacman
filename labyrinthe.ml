@@ -8,5 +8,8 @@
   (*Generation d'un matrice 2D 5x5 *)
     let cas = case_adjacentesbis 5 5 (0,0,2) (* OK *)
 
+    (* Test de l'implentation du module *)
     let test = UF.create 10
+
+    (* Print de case adjacente *)
     let () = print_int (fst cas); print_int (snd cas)
