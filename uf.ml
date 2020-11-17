@@ -152,7 +152,7 @@ let testFind3 = find uf1 7      (* OK *)
 let testFind4 = find uf1 999    (* OK *)
 
 let testUnion1 = union uf1 3 5      (* OK *)
-let testUnion2 = union uf1 1 1      (* PAS ENCORE PRIS EN COMPTE *)
+let testUnion2 = union uf1 1 1      (* OK *)
 let testUnion3 = union uf1 5 8      (* OK *)
 
 let test1 =  printerUF testCreate
