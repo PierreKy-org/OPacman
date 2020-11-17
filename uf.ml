@@ -1,17 +1,17 @@
 
 (*TODO 
-    Creer UF                                                    UPGRADABLE
+    Creer UF                                                    DONE
       -Create                                                   DONE
       -Find                                                     DONE
-->    -Union                                                    UPGRADABLE 
+      -Union                                                    DONE
     Adapter le printer au type UF                               DONE
     Enlever le type Option                                      DONE
     Embellir et Clarifier TOUT le code                          DONE
     Commenter                                                   DONE
     Gérer Bug dans Union, on ne renvoit                         DONE
       pas toute les compo après union                          
-->  Gérer le cas où on fait union de 2 cases de même classes  IN PROGRESS
-    Refaire tout uf pour avoir la bonne structure ???
+    Gérer le cas où on fait union de 2 cases de même classes    DONE
+->  Refaire tout uf pour avoir la bonne structure ???           A CONSIDERER
 *)
 
 type composante_Connexe = {racine : int; enfants : int array} 
@@ -97,11 +97,8 @@ let union uf n m =
   let tailleUF = (Array.length (uf.composantes)) in
   let tabComposanteUnies = ref (fill (tailleUF -1)) in 
   let compteur = ref 0 in
-  (*
-  if (find uf n ) = (find uf m )
-  then false
-  else 
-  *)
+  if (find uf n ) != (find uf m )
+  then begin
   for i=0 to (tailleUF-1) do
     (* Si une composante n'a pas pour racine n ou m on l'ajoute dans 
         le nouveau tableau*)
@@ -118,6 +115,9 @@ let union uf n m =
   let union_de_N_et_M = (fusion uf n m) in
   (!tabComposanteUnies).(tailleUF-2) <- union_de_N_et_M;
   {composantes = !tabComposanteUnies}
+  end
+  else 
+  uf
 
 let printerUF uf = 
   (**uf -> unit
@@ -157,4 +157,4 @@ let testUnion3 = union uf1 5 8      (* OK *)
 
 let test1 =  printerUF testCreate
 let test2 =  print_int testFind4
-let test3 =  printerUF testUnion3
+let test3 =  printerUF testUnion2
