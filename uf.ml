@@ -20,11 +20,15 @@ let is_a_in_compo a elem uf  =
   Indique si la case a a comme racine elem dans l'union-find uf *)
   if uf.(a) = elem then true else false
 
-let create n type_elem =  
-  (** int -> 't -> uf
+let create n  =  
+  (* int -> uf
   Créer une UNION FIND de n 't éléments.
   À utiliser pour initialiser le labyrinthe*)
-  Array.make n type_elem 
+  let tab = Array.make n 0 in
+  for i=0 to ((Array.length tab)-1) do 
+    tab.(i) <- i
+  done;
+  tab
 
 let find uf a = 
   (** uf -> int -> int
