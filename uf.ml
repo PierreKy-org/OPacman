@@ -73,7 +73,7 @@ let printerUF uf =
 
 (* --------------------------------Partie Tests-------------------------------- *)
 
-let uf1 = create 10 0
+let uf1 = create 10
 
 let testFind1 = find uf1 1      (* OK *)
 let testFind2 = find uf1 4      (* OK *)
