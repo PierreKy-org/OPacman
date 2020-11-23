@@ -6,7 +6,7 @@ TODO :
       initaliserMur                                 DONE
       choisirMurAleatoire                           DONE
     Implementer une v1 du generateur de labyrinthe  DONE
-->  Corriger Bug : le labyrinthe n'a aucun mur      IN PROGRESS
+->  Corriger Bug : le labyrinthe n'a aucun mur      DONE
     
   *)
 open Format
@@ -24,16 +24,29 @@ let getTuple3First (a,b,c) = a
 let getTuple3Second (a,b,c) = b
 let getTuple3Last (a,b,c) = c
 
+let printerMurPresent t l h = 
+  for d=0 to 1 do 
+    for x=0 to l-1 do
+      for y=0 to h-1 do
+        printf "%b " (t.(d).(x).(y));
+      done;
+        printf "\n"
+    done;
+    printf "\n"
+  done;
+  printf "fin\n"
+
 
 let initialise_mur_present l h = 
-  let tabX = (Array.make l (Array.make h true)) in
-  Array.make 2 tabX
+  
+  Array.init 2 (fun _ -> (Array.init l (fun _ -> Array.make h true)))
 
 let mur_au_hasard l h =(* renvoie un triplet (d, x, y) *)
   let n = Random.int ((l-1) * h + l * (h-1)) in
   if n < (l-1) * h
   then (0, n mod (l-1), n / (l-1))
-  else let n2 = n - (l-1) * h in
+  else
+  let n2 = n - (l-1) * h in
     (1, n2 mod l, n2 / l)
 
 let gen_lab l h = 
@@ -47,7 +60,10 @@ let gen_lab l h =
     dxy := (mur_au_hasard l h);
     ij := case_adjacentesbis l h !dxy;
     if (UF.find !uf (getTuple2First !ij)) = (UF.find !uf (getTuple2Second !ij))
-    then incrementeur := !incrementeur
+    then begin 
+
+      incrementeur := !incrementeur
+      end
     else begin 
       uf := (UF.union !uf (getTuple2First !ij) (getTuple2Second !ij));
       !mur_present.(getTuple3First(!dxy)).(getTuple3Second(!dxy)).(getTuple3Last(!dxy)) <- false;
@@ -56,17 +72,6 @@ let gen_lab l h =
   done;
   !mur_present
 
-let printerMurPresent t l h = 
-  for d=0 to 1 do 
-    for x=0 to l-1 do
-      for y=0 to h-1 do
-        printf "%b " (t.(d).(x).(y));
-      done;
-        printf "\n"
-    done;
-    printf "\n"
-  done;
-  printf "fin\n"
 
   
 (*Pseudo Code*)
@@ -100,12 +105,10 @@ let testCaseAdj = case_adjacentesbis 5 5 (0,0,2) (* OK *)
 let testMurPresent = initialise_mur_present 3 3
 
 let testGenLab1 = gen_lab 3 3
-let testGenLab2 = gen_lab 3 3
-let testGenLab3 = gen_lab 3 3
 
+let () = printerMurPresent testGenLab1 3 3
 (* Print de case adjacente *)
 (* let test1 = print_int (fst testCaseAdj); print_int (snd testCaseAdj) *)
 
 (* Test de Mur Present & GenLab *)
 (* let test2 = printerMurPresent testMurPresent 3 3  *)
-let test3 = printerMurPresent testGenLab1 3 3
