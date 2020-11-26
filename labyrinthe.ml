@@ -5,7 +5,6 @@ TODO :
     Tracer les murs du labyrinthe.
     Tracer LE labyrinthe.
   *)
-open Graphics
 open Format
 
   let case_adjacentesbis l h (d,x,y) = 
@@ -69,19 +68,6 @@ let gen_lab l h =
   done;
   !mur_present
 
-(* Graphhics *)
-let rec loop () = loop ()
-
-let trace_pourtour l h taille_case = begin 
-  open_graph " 900x900";
-  let x_window = size_x() in
-  let y_window = size_y() in
-  set_color red; 
-  draw_rect ((x_window/2)-((taille_case*l)/2)) ((y_window/2)-((taille_case*h)/2)) (taille_case*l)  (taille_case*h) ;
-  loop ();
-  end
-
-let () = trace_pourtour 10 10 20
 
 (* --------------------------------Partie Tests-------------------------------- *)
 (*
