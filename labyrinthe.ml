@@ -1,14 +1,11 @@
 (*
 TODO : 
-    Importer le package UF.ml                       DONE
-    Pseudo Coder gen_lab                            DONE
-    Implementer les fonctions annexes de gen_lab    DONE
-      initaliserMur                                 DONE
-      choisirMurAleatoire                           DONE
-    Implementer une v1 du generateur de labyrinthe  DONE
-->  Corriger Bug : le labyrinthe n'a aucun mur      DONE
-    
+    Donner un seed au générateur aléatoire.
+->  Tracer le pourtour du labyrinthe.           IN PROGRESS
+    Tracer les murs du labyrinthe.
+    Tracer LE labyrinthe.
   *)
+open Graphics
 open Format
 
   let case_adjacentesbis l h (d,x,y) = 
@@ -60,7 +57,7 @@ let gen_lab l h =
     dxy := (mur_au_hasard l h);
     ij := case_adjacentesbis l h !dxy;
     if (UF.find !uf (getTuple2First !ij)) = (UF.find !uf (getTuple2Second !ij))
-    then begin 
+    then begin  
 
       incrementeur := !incrementeur
       end
@@ -72,32 +69,19 @@ let gen_lab l h =
   done;
   !mur_present
 
+let rec loop () = loop ()
 
-  
-(*Pseudo Code*)
-(*
-let initialise_mur_present l h =
-  0
-let mur_aleatoire mur_present = 
-  0
+let trace_pourtour upleftx uplefty l h taille_case = begin 
+  open_graph " 900x900";
+  set_color red; 
+  draw_rect (upleftx) (uplefty-(taille_case*h)) (taille_case*l)  (taille_case*h) ;
+  loop ();
+  end
 
-let gen_lab l h = 
-  let mur_present = ref (initialise_mur_present l h) in 
-  let uf = ref (Uf.find (l*h)) in
-  for i = 0 to ((l*h)-1) 
-    let (d,x,y) = mur_aleatoire mur_present
-    let (i,j) case_adjacentes l h (d,x,y)
-    if (UF.find i) = (UF.find 
-    then i := !i-1
-    else begin 
-      uf := (Uf.union i j );
-      mur_present.(m.(0)).(m.(1)).(m(2)) <- false;
-    end
-  done;
-  !mur_present
-*)
+let () = trace_pourtour 250 250 10 10 20
+
 (* --------------------------------Partie Tests-------------------------------- *)
-
+(*
 (* Test de l'implentation du module *)
 let test = (UF.create 10)
 (*Generation d'un matrice 2D 5x5 *)
@@ -112,3 +96,4 @@ let () = printerMurPresent testGenLab1 3 3
 
 (* Test de Mur Present & GenLab *)
 (* let test2 = printerMurPresent testMurPresent 3 3  *)
+*)
