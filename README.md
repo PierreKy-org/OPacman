@@ -23,9 +23,11 @@ https://lms.univ-cotedazur.fr/mod/url/view.php?id=189570
 * Afficher à l'aide de Ocaml Graphics le labyrinthe.
 
 ***Description :***
+
 Dans cette partie il faut générer le labyrinthe puis l'afficher.
 Il faudra utiliser le type de donnée Union Find afin de créer un labyrinthe complet (1 chemin de l'entrée à la sortie)
 Puis afficher le labyrinthe ainsi obtenu grâce à la librairie Graphics d'Ocaml
+
 ---
 
 [![Version](https://img.shields.io/badge/ETAPE-2-2578B0.svg?style=for-the-badge&logo=appveyor)]()
@@ -38,11 +40,13 @@ Puis afficher le labyrinthe ainsi obtenu grâce à la librairie Graphics d'Ocaml
 * Gagner la partie (le pacman arrive à la fin du labyrinthe)
 
 ***Description :***
+
 Dans cette partie du projet il faut créer un pacman (rond jaune) et être en mesure de le déplacer dans le labyrinthe.
 Pour réaliser le déplacement on utilisera les saisies claviers et il faudra mettre à l'affichage pour que le pacman ne 
 reste pas affiché à sa position initiale après un déplacement.
 Si le pacman atteint la fin du labyrinthe le joueur gagne. (il faut donc déterminer la dernière case et le fait 
 que le pacman l'atteigne.)
+
 ---
 [![Version](https://img.shields.io/badge/Etape-3-blue.svg?style=for-the-badge&logo=appveyor)]()
 ![Deadline](https://img.shields.io/badge/DEADLINE-13/12/2020-blue.svg?style=for-the-badge&logo=codeforces)
@@ -53,6 +57,7 @@ que le pacman l'atteigne.)
 * Perdre la partie (si le Pacman est touché par le fantôme)
 
 ***Description :***
+
 Dans cette partie du projet il faut implémenter le fantôme (rond bleu), ennemi juré de Pacman, qui tentera de rattraper 
 Pacman et de l'empêcher d'atteindre le bout du labyrinthe. Il faudra donc coder un 'comportement'. Si le fantôme atteint le 
 Pacman la partie s'arrête et le joueur a perdu.
