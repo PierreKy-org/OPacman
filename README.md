@@ -1,6 +1,6 @@
 # [Projet Ocaml](https://github.com/L3-Info-Miage-Universite-Cote-D-Azur/projetinfo-2019-stoneage-sad)
 
-> Repository for the L3 Project in PCOO
+> Repository for the L3 Project in Functionnal Programming
 
 [![Release](https://img.shields.io/badge/Current_Release-None-blue.svg)](https://github.com/L3-Info-Miage-Universite-Cote-D-Azur/projetinfo-2019-stoneage-sad/releases/latest)
 [![Java](https://img.shields.io/badge/Ocaml-4.07.0-orange.svg?logo=ocaml&logoColor=orange)](https://www.oracle.com/technetwork/java/javase/downloads/jdk11-downloads-5066655.html)
