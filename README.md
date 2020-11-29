@@ -13,6 +13,12 @@ https://lms.univ-cotedazur.fr/mod/url/view.php?id=189570
 
 ---
 
+### Utilisation : 
+1. Télécharger le projet
+2. Extraire le projet
+3. ocamlc -I ~/.opam/default/lib/graphics  graphics.cma UF.ml labyrinthe.ml show.ml -o run.byte && run.byte
+
+---
 [![Version](https://img.shields.io/badge/Etape-1-blue.svg?style=for-the-badge&logo=appveyor)](https://github.com/L3-Info-Miage-Universite-Cote-D-Azur/projetinfo-2019-stoneage-sad/milestone/1)
 ![Deadline](https://img.shields.io/badge/DEADLINE-30/11/2020-blue.svg?style=for-the-badge&logo=codeforces)
 #### Afficher le Labyrinthe
