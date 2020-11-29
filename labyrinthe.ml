@@ -5,6 +5,7 @@ TODO :
     Tracer les murs du labyrinthe.
     Tracer LE labyrinthe.
   *)
+open Graphics
 open Format
 
   let case_adjacentesbis l h (d,x,y) = 
@@ -38,7 +39,7 @@ let initialise_mur_present l h =
   Array.init 2 (fun _ -> (Array.init l (fun _ -> Array.make h true)))
 
 let mur_au_hasard l h =(* renvoie un triplet (d, x, y) *)
-  let n = Random.int ((l-1) * h + l * (h-1)) in
+  let n = Random.self_init (); Random.int ((l-1) * h + l * (h-1)) in
   if n < (l-1) * h
   then (0, n mod (l-1), n / (l-1))
   else
@@ -52,7 +53,7 @@ let gen_lab l h =
   let ij = ref (0,0) in 
   let incrementeur = ref 1 in 
 
-  while !incrementeur < ((l*h)-1) do
+  while !incrementeur <= ((l*h)-1) do
     dxy := (mur_au_hasard l h);
     ij := case_adjacentesbis l h !dxy;
     if (UF.find !uf (getTuple2First !ij)) = (UF.find !uf (getTuple2Second !ij))
@@ -77,12 +78,12 @@ let test = (UF.create 10)
 let testCaseAdj = case_adjacentesbis 5 5 (0,0,2) (* OK *)
 let testMurPresent = initialise_mur_present 3 3
 
-let testGenLab1 = gen_lab 3 3
-
-let () = printerMurPresent testGenLab1 3 3
 (* Print de case adjacente *)
 (* let test1 = print_int (fst testCaseAdj); print_int (snd testCaseAdj) *)
 
 (* Test de Mur Present & GenLab *)
 (* let test2 = printerMurPresent testMurPresent 3 3  *)
 *)
+let testGenLab1 = gen_lab 3 3
+
+let () = printerMurPresent testGenLab1 3 3
