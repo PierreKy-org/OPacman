@@ -1,6 +1,6 @@
 # [Projet Ocaml](https://github.com/L3-Info-Miage-Universite-Cote-D-Azur/projetinfo-2019-stoneage-sad)
 
-> Repository for the L3 Project in PCOO
+> Repository for the L3 Project in functionnal programming
 
 [![Release](https://img.shields.io/badge/Current_Release-None-blue.svg)](https://github.com/L3-Info-Miage-Universite-Cote-D-Azur/projetinfo-2019-stoneage-sad/releases/latest)
 [![Java](https://img.shields.io/badge/Ocaml-4.07.0-orange.svg?logo=ocaml&logoColor=orange)](https://www.oracle.com/technetwork/java/javase/downloads/jdk11-downloads-5066655.html)
@@ -14,7 +14,7 @@ https://lms.univ-cotedazur.fr/mod/url/view.php?id=189570
 ---
 
 [![Version](https://img.shields.io/badge/Etape-1-blue.svg?style=for-the-badge&logo=appveyor)](https://github.com/L3-Info-Miage-Universite-Cote-D-Azur/projetinfo-2019-stoneage-sad/milestone/1)
-![Deadline](https://img.shields.io/badge/DEADLINE-30/11/2020-blue.svg?style=for-the-badge&logo=codeforces)
+![Deadline](https://img.shields.io/badge/DEADLINE-30/11/2020-green.svg?style=for-the-badge&logo=codeforces)
 #### Afficher le Labyrinthe
 ***Les enjeux de cette partie sont :***
 * La représentation des données.
