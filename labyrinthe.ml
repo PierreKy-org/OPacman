@@ -35,7 +35,6 @@ let printerMurPresent t l h =
 
 
 let initialise_mur_present l h = 
-  
   Array.init 2 (fun _ -> (Array.init l (fun _ -> Array.make h true)))
 
 let mur_au_hasard l h =(* renvoie un triplet (d, x, y) *)

@@ -4,8 +4,15 @@ open Graphics
 let rec loop () = loop ()
 
 let trace_pourtour upleftx uplefty l h taille_case = begin 
-  set_color red; 
+  set_color black; 
   draw_rect (upleftx) ((uplefty-((taille_case*h)))) (taille_case*l)  (taille_case*h) ;
+  moveto (upleftx) (uplefty);
+  set_color white; 
+  lineto upleftx (uplefty-taille_case);
+  set_color black; 
+  moveto (upleftx  + (taille_case * (l) )) (uplefty - (taille_case * (h-1))); 
+  set_color white; 
+  lineto (upleftx  + (taille_case * (l) ))  (uplefty - (taille_case * (h)));
   end
 
 let trace_mur upleftx uplefty taille_case (d,x,y) = 
@@ -20,7 +27,6 @@ let trace_lab upleftx uplefty taille_case l h mur_present = begin
     open_graph " 900x900"; 
     let doNothing = ref 0 in 
 
-    trace_pourtour upleftx uplefty l h taille_case;
       for x = 0 to (l-1) do
         for y = 0 to (h-1) do
           if (mur_present.(0).(x).(y)) = true 
@@ -31,7 +37,9 @@ let trace_lab upleftx uplefty taille_case l h mur_present = begin
           else doNothing := !doNothing;
           done;
         done;
-      end
+    trace_pourtour upleftx uplefty l h taille_case;
+    end
+
 
 let mur_p = Labyrinthe.gen_lab 10 10
 let () =  trace_lab 200 600 50 10 10 mur_p;
