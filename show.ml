@@ -15,6 +15,7 @@ let trace_pacman uplefty upleftx l h taille_case  =
   set_color yellow;
   fill_circle ((uplefty + ((taille_case* (y+1))))-(taille_case/2)) ((upleftx - ((taille_case*(x+1))))+(taille_case/2))
      ((taille_case/2)-3)
+
 (* trace un rond blanc pour effacer l'emplacement précédent de pacman *) 
 let white_pacman uplefty upleftx l h taille_case c = 
    let x = !case_pacman / l in 
@@ -29,9 +30,26 @@ let white_pacman uplefty upleftx l h taille_case c =
      ((taille_case/2)-3)
    | w when w = 's' -> fill_circle ((uplefty + ((taille_case* (y+1))))-(taille_case/2)) ((upleftx - ((taille_case*(x))))+(taille_case/2))
      ((taille_case/2)-3)
+   (* Ne fais rien si une autre touche est enfoncée *)
+   | w -> case_pacman := !case_pacman 
  
+let rec winner_loop() =
+                 set_color black;
+                moveto 300 450;
+                set_font "-*-fixed-medium-r-semicondensed--150-*-*-*-*-*-iso8859-1" ;
+                draw_string("GAGNE");
+               winner_loop() 
+            
+
 (* Boucle infinie qui lance l'affichage + la lecture d'entrée clavier *) 
-let rec loop l = 
+let rec loop l h = 
+ if !case_pacman = l*h-1 then begin
+         clear_graph();
+         winner_loop()
+        end
+        else 
+           
+           
  let c = read_key() in 
  let x = !case_pacman / l in
  let y = !case_pacman mod l in
@@ -40,11 +58,14 @@ let rec loop l =
          * - efface l'ancien pacman 
          * - affiche le nouveau pacman *)
  match c with 
-   | w when w = 'z' -> case_pacman := (y + l*(x-1)); print_int(!case_pacman) ;print_string("\n");white_pacman 200 800 10 10 50 c; trace_pacman 200 800 10 10 50 ;loop l
-   | w when w = 'q' -> case_pacman := (y-1) + l*x; print_int(!case_pacman) ; print_string("\n");white_pacman 200 800 10 10 50 c;trace_pacman 200 800 10 10 50 ;loop l
-   | w when w = 'd' -> case_pacman := (y+1) + l*x; print_int(!case_pacman) ; print_string("\n");white_pacman 200 800 10 10 50 c;trace_pacman 200 800 10 10 50 ;loop l
-   | w when w = 's' -> case_pacman := (y + l*(x+1)); print_int(!case_pacman) ; print_string("\n");white_pacman 200 800 10 10 50 c;trace_pacman 200 800 10 10 50 ;loop l
- 
+   | w when w = 'z' -> case_pacman := (y + l*(x-1)); white_pacman 200 800 10 10 50 c; trace_pacman 200 800 10 10 50 ;loop l h
+   | w when w = 'q' -> case_pacman := (y-1) + l*x; white_pacman 200 800 10 10 50 c;trace_pacman 200 800 10 10 50 ;loop l h
+   | w when w = 'd' -> case_pacman := (y+1) + l*x; white_pacman 200 800 10 10 50 c;trace_pacman 200 800 10 10 50 ;loop l h
+   | w when w = 's' -> case_pacman := (y + l*(x+1)); white_pacman 200 800 10 10 50 c;trace_pacman 200 800 10 10 50 ;loop l h
+   (* Permet de quitter le jeu *)
+   | w when w = 'n' -> case_pacman := !case_pacman
+   (*Empeche de crash si on appuie sur autre chose *)
+   | w -> loop l h 
 
  
 
@@ -87,7 +108,7 @@ let trace_lab upleftx uplefty taille_case l h mur_present = begin
 let mur_p = Labyrinthe.gen_lab 10 10
 let () =  trace_lab 200 800 50 10 10 mur_p;
           trace_pacman 200 800 10 10 50;
-loop 10 
+loop 10 10 
 
 
 
