@@ -5,6 +5,7 @@ open Unix
 
 
 
+let mur_p = ref (Labyrinthe.gen_lab 10 10)
 (* La case où le pacman est actuellement *)
 let case_pacman = ref 0
 
@@ -23,7 +24,7 @@ let white_pacman uplefty upleftx l h taille_case c =
    let y = !case_pacman mod l in
    set_color white;
   match c with 
-   | w when w = 'z' -> fill_circle ((uplefty + ((taille_case* (y+1))))-(taille_case/2)) ((upleftx - ((taille_case*(x+2))))+(taille_case/2))
+   | w when w = 'z' ->  fill_circle ((uplefty + ((taille_case* (y+1))))-(taille_case/2)) ((upleftx - ((taille_case*(x+2))))+(taille_case/2))
      ((taille_case/2)-3)
    | w when w = 'q' ->  fill_circle ((uplefty + ((taille_case* (y+2))))-(taille_case/2)) ((upleftx - ((taille_case*(x+1))))+(taille_case/2))
      ((taille_case/2)-3)  
@@ -60,10 +61,32 @@ let rec loop l h =
          * - efface l'ancien pacman 
          * - affiche le nouveau pacman *)
    match c with 
-     | w when w = 'z' -> case_pacman := (y + l*(x-1)); white_pacman 200 800 10 10 50 c; trace_pacman 200 800 10 10 50 ;loop l h
-     | w when w = 'q' -> case_pacman := (y-1) + l*x; white_pacman 200 800 10 10 50 c;trace_pacman 200 800 10 10 50 ;loop l h
-     | w when w = 'd' -> case_pacman := (y+1) + l*x; white_pacman 200 800 10 10 50 c;trace_pacman 200 800 10 10 50 ;loop l h
-     | w when w = 's' -> case_pacman := (y + l*(x+1)); white_pacman 200 800 10 10 50 c;trace_pacman 200 800 10 10 50 ;loop l h
+     | w when w = 'z' ->  if (x>0) then
+      if(!mur_p.(0).(x-1).(y) = false) then
+          case_pacman := (y + l*(x-1)); 
+          white_pacman 200 800 10 10 50 c; 
+          trace_pacman 200 800 10 10 50 ; 
+          loop l h;
+          
+     | w when w = 'q' ->  if (y>0) then 
+      if(!mur_p.(1).(x).(y-1) = false) then
+        case_pacman := (y-1) + l*x;
+        white_pacman 200 800 10 10 50 c;
+        trace_pacman 200 800 10 10 50 ;
+        loop l h;
+
+     | w when w = 'd' ->  if(!mur_p.(1).(x).(y) = false) then
+      case_pacman := (y+1) + l*x;
+      white_pacman 200 800 10 10 50 c;
+      trace_pacman 200 800 10 10 50 ;
+      loop l h;
+
+     | w when w = 's' -> if(!mur_p.(0).(x).(y) = false) then
+      case_pacman := (y + l*(x+1));
+      white_pacman 200 800 10 10 50 c;
+      trace_pacman 200 800 10 10 50 ;
+      loop l h;
+      
      (* Permet de quitter le jeu *)
      | w when w = 'n' -> case_pacman := !case_pacman
    (*Empeche de crash si on appuie sur autre chose *)
@@ -109,8 +132,9 @@ let trace_lab upleftx uplefty taille_case l h mur_present = begin
     trace_pourtour upleftx uplefty l h taille_case;
     end
 
-let mur_p = Labyrinthe.gen_lab 10 10
-let () =  trace_lab 200 800 50 10 10 mur_p;
+let () =  
+          (Labyrinthe.printerMurPresent !mur_p 10 10) ;
+          trace_lab 200 800 50 10 10 !mur_p;
           trace_pacman 200 800 10 10 50;
 loop 10 10 
 
