@@ -8,6 +8,7 @@ TODO :
 open Graphics
 open Format
 
+
   let case_adjacentesbis l h (d,x,y) = 
   (** CASE ADJACENTES V2 l'algo calcule la position comme demande le prof
    0 donne le trait horizontal et 1 le trait vertical

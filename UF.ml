@@ -14,6 +14,7 @@
 ->  Refaire tout uf pour avoir la bonne structure ???           A CONSIDERER
 *)
 
+
 type composante_Connexe = {racine : int; enfants : int array} 
 type uf = {composantes: composante_Connexe array }
 
