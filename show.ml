@@ -45,6 +45,12 @@ let rec winner_loop() =
   draw_string("GAGNE");
   winner_loop() 
             
+let rec exit_loop() = 
+  set_color black;
+  moveto 50 450;
+  set_font "-*-fixed-medium-r-semicondensed--100-*-*-*-*-*-iso8859-1" ;
+  draw_string("Fin de la Partie");
+  exit_loop() 
 
 (* Boucle infinie qui lance l'affichage + la lecture d'entrée clavier *) 
 let rec loop l h = 
@@ -86,7 +92,10 @@ let rec loop l h =
       white_pacman 200 800 10 10 50 c;
       trace_pacman 200 800 10 10 50 ;
       loop l h;
-      
+     (* Quitte le jeu sans fermer la fenêtre (comme dans l'ennoncé) *) 
+     | w when w = 'e' -> clear_graph(); 
+                         exit_loop();
+
      (* Permet de quitter le jeu *)
      | w when w = 'n' -> case_pacman := !case_pacman
    (*Empeche de crash si on appuie sur autre chose *)
