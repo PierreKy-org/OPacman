@@ -5,31 +5,45 @@ open Unix
 
 
 
+(* La case où le pacman est actuellement *)
 let case_pacman = ref 0
 
+(* trace le pacman par rapport à case_pacman *)
 let trace_pacman uplefty upleftx l h taille_case  = 
   let x = !case_pacman / l in
   let y = !case_pacman mod l in
- (* set_color white;
-  match c with 
-  | w when w = 'z' -> fill_circle ((uplefty + ((taille_case* (y))))-(taille_case/2)) ((upleftx - ((taille_case*(x+1))))+(taille_case/2))
-     ((taille_case/2)-3);
-  | w when w = 'q' ->
-  | w when w = 'd' ->
-  | w when w = 's' -> *)
-     set_color yellow;
+  set_color yellow;
   fill_circle ((uplefty + ((taille_case* (y+1))))-(taille_case/2)) ((upleftx - ((taille_case*(x+1))))+(taille_case/2))
      ((taille_case/2)-3)
+(* trace un rond blanc pour effacer l'emplacement précédent de pacman *) 
+let white_pacman uplefty upleftx l h taille_case c = 
+   let x = !case_pacman / l in 
+   let y = !case_pacman mod l in
+   set_color white;
+  match c with 
+   | w when w = 'z' -> fill_circle ((uplefty + ((taille_case* (y+1))))-(taille_case/2)) ((upleftx - ((taille_case*(x+2))))+(taille_case/2))
+     ((taille_case/2)-3)
+   | w when w = 'q' ->  fill_circle ((uplefty + ((taille_case* (y+2))))-(taille_case/2)) ((upleftx - ((taille_case*(x+1))))+(taille_case/2))
+     ((taille_case/2)-3)  
+   | w when w = 'd' -> fill_circle ((uplefty + ((taille_case* (y))))-(taille_case/2)) ((upleftx - ((taille_case*(x+1))))+(taille_case/2))
+     ((taille_case/2)-3)
+   | w when w = 's' -> fill_circle ((uplefty + ((taille_case* (y+1))))-(taille_case/2)) ((upleftx - ((taille_case*(x))))+(taille_case/2))
+     ((taille_case/2)-3)
  
+(* Boucle infinie qui lance l'affichage + la lecture d'entrée clavier *) 
 let rec loop l = 
  let c = read_key() in 
  let x = !case_pacman / l in
  let y = !case_pacman mod l in
+ (* dans l'ordre :
+         * - calcule la position du pacman après la pression d'une touche
+         * - efface l'ancien pacman 
+         * - affiche le nouveau pacman *)
  match c with 
-   | w when w = 'z' -> case_pacman := (y + l*(x-1)); print_int(!case_pacman) ;print_string("\n"); trace_pacman 200 800 10 10 50 ;loop l
-   | w when w = 'q' -> case_pacman := (y-1) + l*x; print_int(!case_pacman) ; print_string("\n");trace_pacman 200 800 10 10 50 ;loop l
-   | w when w = 'd' -> case_pacman := (y+1) + l*x; print_int(!case_pacman) ; print_string("\n");trace_pacman 200 800 10 10 50 ;loop l
-   | w when w = 's' -> case_pacman := (y + l*(x+1)); print_int(!case_pacman) ; print_string("\n");trace_pacman 200 800 10 10 50 ;loop l
+   | w when w = 'z' -> case_pacman := (y + l*(x-1)); print_int(!case_pacman) ;print_string("\n");white_pacman 200 800 10 10 50 c; trace_pacman 200 800 10 10 50 ;loop l
+   | w when w = 'q' -> case_pacman := (y-1) + l*x; print_int(!case_pacman) ; print_string("\n");white_pacman 200 800 10 10 50 c;trace_pacman 200 800 10 10 50 ;loop l
+   | w when w = 'd' -> case_pacman := (y+1) + l*x; print_int(!case_pacman) ; print_string("\n");white_pacman 200 800 10 10 50 c;trace_pacman 200 800 10 10 50 ;loop l
+   | w when w = 's' -> case_pacman := (y + l*(x+1)); print_int(!case_pacman) ; print_string("\n");white_pacman 200 800 10 10 50 c;trace_pacman 200 800 10 10 50 ;loop l
  
 
  
