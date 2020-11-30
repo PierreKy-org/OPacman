@@ -78,6 +78,10 @@ let test = (UF.create 10)
 let testCaseAdj = case_adjacentesbis 5 5 (0,0,2) (* OK *)
 let testMurPresent = initialise_mur_present 3 3
 
+let testGenLab1 = gen_lab 3 3
+let () = printerMurPresent testGenLab1 3 3
+
+
 (* Print de case adjacente *)
 (* let test1 = print_int (fst testCaseAdj); print_int (snd testCaseAdj) *)
 

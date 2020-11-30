@@ -1,6 +1,8 @@
 # [Projet Ocaml](https://github.com/L3-Info-Miage-Universite-Cote-D-Azur/projetinfo-2019-stoneage-sad)
 
-> Repository for the L3 Project in functionnal programming
+
+> Repository for the L3 Project in Functionnal Programming
+
 
 [![Release](https://img.shields.io/badge/Current_Release-None-blue.svg)](https://github.com/L3-Info-Miage-Universite-Cote-D-Azur/projetinfo-2019-stoneage-sad/releases/latest)
 [![Java](https://img.shields.io/badge/Ocaml-4.07.0-orange.svg?logo=ocaml&logoColor=orange)](https://www.oracle.com/technetwork/java/javase/downloads/jdk11-downloads-5066655.html)
@@ -10,6 +12,15 @@
 
 ### Lien du projet : 
 https://lms.univ-cotedazur.fr/mod/url/view.php?id=189570
+
+---
+
+
+
+### Utilisation : 
+1. Télécharger le projet
+2. Extraire le projet
+3. ocamlc -I ~/.opam/default/lib/graphics  graphics.cma UF.ml labyrinthe.ml show.ml -o run.byte && ./run.byte
 
 ---
 
