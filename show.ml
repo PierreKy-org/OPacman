@@ -67,31 +67,66 @@ let rec loop l h =
          * - efface l'ancien pacman 
          * - affiche le nouveau pacman *)
    match c with 
-     | w when w = 'z' ->  if (x>0) then
-      if(!mur_p.(0).(x-1).(y) = false) then
-          case_pacman := (y + l*(x-1)); 
-          white_pacman 200 800 10 10 50 c; 
-          trace_pacman 200 800 10 10 50 ; 
-          loop l h;
+     | w when w = 'z' ->  
+      if (x>0) then
+          if(!mur_p.(0).(x-1).(y) = false) then
+             begin
+             case_pacman := (y + l*(x-1)); 
+             white_pacman 200 800 10 10 50 c; 
+             trace_pacman 200 800 10 10 50 ; 
+             loop l h;
+             end
+          else  
+             begin
+              sound 12000 1000;
+              loop l h
+             end
+      else 
+          sound 12000 1000;
+          loop l h
           
-     | w when w = 'q' ->  if (y>0) then 
-      if(!mur_p.(1).(x).(y-1) = false) then
-        case_pacman := (y-1) + l*x;
-        white_pacman 200 800 10 10 50 c;
-        trace_pacman 200 800 10 10 50 ;
-        loop l h;
+     | w when w = 'q' ->  
+      if (y>0) then 
+        if(!mur_p.(1).(x).(y-1) = false) then begin
+           case_pacman := (y-1) + l*x;
+           white_pacman 200 800 10 10 50 c;
+           trace_pacman 200 800 10 10 50 ;
+           loop l h;
+           end
+        else  
+           begin
+           sound 12000 100;
+           loop l h
+           end
+      else 
+        sound 12000 1000;
+        loop l h
+      
 
      | w when w = 'd' ->  if(!mur_p.(1).(x).(y) = false) then
+      begin
       case_pacman := (y+1) + l*x;
       white_pacman 200 800 10 10 50 c;
       trace_pacman 200 800 10 10 50 ;
       loop l h;
-
+      end
+      else
+          begin
+          sound 12000 1000; 
+          loop l h
+          end
      | w when w = 's' -> if(!mur_p.(0).(x).(y) = false) then
+      begin
       case_pacman := (y + l*(x+1));
       white_pacman 200 800 10 10 50 c;
       trace_pacman 200 800 10 10 50 ;
       loop l h;
+      end
+      else 
+        begin
+          sound 12000 1000;
+          loop l h 
+        end
      (* Quitte le jeu sans fermer la fenêtre (comme dans l'ennoncé) *) 
      | w when w = 'e' -> clear_graph(); 
                          exit_loop();
