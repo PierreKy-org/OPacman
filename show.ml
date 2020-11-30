@@ -4,6 +4,7 @@ open Unix
 (* Graphics *)
 let rec loop () = loop ()
 
+
 (* 0 bug elle marche nickel, construit le pourtour du labyrinthe et affiche l'entrée et la sortie du labyrinthe*)
 let trace_pourtour upleftx uplefty l h taille_case = begin 
   set_color black; 
