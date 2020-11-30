@@ -137,7 +137,6 @@ let printerComposanteEnfants compo =
   print_string "fin\n"
 
 (* --------------------------------Partie Tests-------------------------------- 
-
 let testCreate = create 10
 let compo1 = {racine = 0; enfants = [|1;2;3|]}  
 let compo2 = {racine = 1; enfants =  [|4;5;6|]}  
@@ -145,18 +144,14 @@ let compo3 = {racine = 2; enfants =  [|7;8|]}
 let compoArray = [|compo1;compo2;compo3|]
 let construireUF tabCompo = {composantes = tabCompo}
 let uf1 = construireUF compoArray
-
 let testFind1 = find uf1 1      (* OK *)
 let testFind2 = find uf1 4      (* OK *)
 let testFind3 = find uf1 7      (* OK *)
 let testFind4 = find uf1 999    (* OK *)
-
 let testUnion1 = union uf1 3 5      (* OK *)
 let testUnion2 = union uf1 1 1      (* OK *)
 let testUnion3 = union uf1 5 8      (* OK *)
-
 let test1 =  printerUF testCreate
 let test2 =  print_int testFind4
 let test3 =  printerUF testUnion2
-
 *)

@@ -10,10 +10,11 @@ open Format
 
   let case_adjacentesbis l h (d,x,y) = 
   (** CASE ADJACENTES V2 l'algo calcule la position comme demande le prof
+   0 donne le trait horizontal et 1 le trait vertical
    int  -> int -> (int,int,int) -> (int,int) *)
     match (d,x,y) with 
-    | (w,x,y) when w  = 0 -> if x >= (l-1) then invalid_arg "limite du labyrinthe" else (y+l*x, y+l*(x+1))
-    | (w,_,_) -> if y >= (h-1) then invalid_arg "limite du labyrinthe" else (y+l*x, (y+1)+l*x)
+    | (w,x,y) when w  = 0 -> if x >= (l-1) then invalid_arg "limite du labyrinthe" else (y+l*x, ((y)+l*(x+1)))
+    | (w,_,_) -> if y >= (h-1) then invalid_arg "limite du labyrinthe" else (y+l*x, ((y+1)+l*(x)))
 
 let getTuple2First (a,b)= a 
 let getTuple2Second (a,b) =  b
@@ -83,6 +84,4 @@ let testMurPresent = initialise_mur_present 3 3
 (* Test de Mur Present & GenLab *)
 (* let test2 = printerMurPresent testMurPresent 3 3  *)
 *)
-let testGenLab1 = gen_lab 3 3
 
-let () = printerMurPresent testGenLab1 3 3
