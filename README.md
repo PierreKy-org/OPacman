@@ -42,7 +42,7 @@ Puis afficher le labyrinthe ainsi obtenu grâce à la librairie Graphics d'Ocaml
 ---
 
 [![Version](https://img.shields.io/badge/ETAPE-2-2578B0.svg?style=for-the-badge&logo=appveyor)]()
-![Deadline](https://img.shields.io/badge/DEADLINE-06/12/2020-blue.svg?style=for-the-badge&logo=codeforces)
+![Deadline](https://img.shields.io/badge/DEADLINE-06/12/2020-green.svg?style=for-the-badge&logo=codeforces)
 #### Interaction Utilisateur
 ***Fonctionnalités attendues :***
 * Afficher un Pacman
