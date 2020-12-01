@@ -42,10 +42,14 @@ let initialise_mur_present l h =
 let mur_au_hasard l h =(* renvoie un triplet (d, x, y) *)
   let n = Random.self_init (); Random.int ((l-1) * h + l * (h-1)) in
   if n < (l-1) * h
-  then (0, n mod (l-1), n / (l-1))
+  then begin
+          (1, n mod l, n / l) 
+  end
   else
-  let n2 = n - (l-1) * h in
-    (1, n2 mod l, n2 / l)
+
+         let n2 = n - (l-1) * h in
+    (0, n2 mod (l-1), n2 / (l-1))
+
 
 let gen_lab l h = 
   let mur_present = ref (initialise_mur_present l h) in 
@@ -59,7 +63,6 @@ let gen_lab l h =
     ij := case_adjacentesbis l h !dxy;
     if (UF.find !uf (getTuple2First !ij)) = (UF.find !uf (getTuple2Second !ij))
     then begin  
-
       incrementeur := !incrementeur
       end
     else begin 
@@ -72,21 +75,25 @@ let gen_lab l h =
 
 
 (* --------------------------------Partie Tests-------------------------------- *)
-(*
+
 (* Test de l'implentation du module *)
-let test = (UF.create 10)
+(* let test = (UF.create 10) *)
 (*Generation d'un matrice 2D 5x5 *)
-let testCaseAdj = case_adjacentesbis 5 5 (0,0,2) (* OK *)
-let testMurPresent = initialise_mur_present 3 3
+(*let testCaseAdj = case_adjacentesbis 5 5 (0,0,2) (* OK *)
 
-let testGenLab1 = gen_lab 3 3
-let () = printerMurPresent testGenLab1 3 3
+let testCaseAdj2 = case_adjacentesbis 5 5 (1,0,2) (* OK *) *)
+(*let testMurPresent = initialise_mur_present 3 3
+*)
 
+(*let () = printerMurPresent testGenLab1 3 3
+*)
 
 (* Print de case adjacente *)
-(* let test1 = print_int (fst testCaseAdj); print_int (snd testCaseAdj) *)
 
 (* Test de Mur Present & GenLab *)
 (* let test2 = printerMurPresent testMurPresent 3 3  *)
-*)
-
+(*
+let () = print_string("--------------TEST MODULE LABYRINTHE -------------\n"); 
+let zizi = gen_lab 5 5 in
+ print_int (fst testCaseAdj); print_int (snd testCaseAdj); print_string ("\n");
+  print_int (fst testCaseAdj2); print_int (snd testCaseAdj2); print_string ("\n")  *)

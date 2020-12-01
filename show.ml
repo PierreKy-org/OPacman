@@ -5,7 +5,7 @@ open Unix
 
 
 
-let mur_p = ref (Labyrinthe.gen_lab 10 10)
+let mur_p = ref (Labyrinthe.gen_lab 30 30)
 (* La case où le pacman est actuellement *)
 let case_pacman = ref 0
 
@@ -53,7 +53,7 @@ let rec exit_loop() =
   exit_loop() 
 
 (* Boucle infinie qui lance l'affichage + la lecture d'entrée clavier *) 
-let rec loop l h = 
+let rec loop uplefty upleftx l h taille_case = 
  if !case_pacman = l*h-1 then begin
    clear_graph();
    winner_loop()
@@ -72,60 +72,60 @@ let rec loop l h =
           if(!mur_p.(0).(x-1).(y) = false) then
              begin
              case_pacman := (y + l*(x-1)); 
-             white_pacman 200 800 10 10 50 c; 
-             trace_pacman 200 800 10 10 50 ; 
-             loop l h;
+             white_pacman uplefty upleftx l h taille_case c; 
+             trace_pacman uplefty upleftx l h taille_case ; 
+             loop uplefty upleftx l h taille_case;
              end
           else  
              begin
               sound 12000 1000;
-              loop l h
+              loop uplefty upleftx l h taille_case
              end
       else 
           sound 12000 1000;
-          loop l h
+          loop uplefty upleftx l h taille_case
           
      | w when w = 'q' ->  
       if (y>0) then 
         if(!mur_p.(1).(x).(y-1) = false) then begin
            case_pacman := (y-1) + l*x;
-           white_pacman 200 800 10 10 50 c;
-           trace_pacman 200 800 10 10 50 ;
-           loop l h;
+           white_pacman uplefty upleftx  l h taille_case c;
+           trace_pacman uplefty upleftx  l h taille_case ;
+           loop uplefty upleftx l h taille_case;
            end
         else  
            begin
            sound 12000 100;
-           loop l h
+           loop uplefty upleftx l h taille_case
            end
       else 
         sound 12000 1000;
-        loop l h
+        loop uplefty upleftx l h taille_case
       
 
      | w when w = 'd' ->  if(!mur_p.(1).(x).(y) = false) then
       begin
       case_pacman := (y+1) + l*x;
-      white_pacman 200 800 10 10 50 c;
-      trace_pacman 200 800 10 10 50 ;
-      loop l h;
+      white_pacman uplefty upleftx  l h taille_case c;
+      trace_pacman uplefty upleftx  l h taille_case ;
+      loop uplefty upleftx l h taille_case ;
       end
       else
           begin
           sound 12000 1000; 
-          loop l h
+          loop uplefty upleftx l h taille_case
           end
      | w when w = 's' -> if(!mur_p.(0).(x).(y) = false) then
       begin
       case_pacman := (y + l*(x+1));
-      white_pacman 200 800 10 10 50 c;
-      trace_pacman 200 800 10 10 50 ;
-      loop l h;
+      white_pacman uplefty upleftx  l h taille_case c;
+      trace_pacman uplefty upleftx  l h taille_case ;
+      loop uplefty upleftx l h taille_case;
       end
       else 
         begin
           sound 12000 1000;
-          loop l h 
+          loop uplefty upleftx l h taille_case
         end
      (* Quitte le jeu sans fermer la fenêtre (comme dans l'ennoncé) *) 
      | w when w = 'e' -> clear_graph(); 
@@ -134,7 +134,7 @@ let rec loop l h =
      (* Permet de quitter le jeu *)
      | w when w = 'n' -> case_pacman := !case_pacman
    (*Empeche de crash si on appuie sur autre chose *)
-     | w -> loop l h 
+     | w -> loop uplefty upleftx l h taille_case
 
  
 
@@ -162,7 +162,7 @@ let trace_mur uplefty upleftx taille_case (d,x,y) =
 
 (* Début de trace_lab, trace le labyrinthe en suivant la matrice de mur, trace d'abord les murs puis le pourtour *)
 let trace_lab upleftx uplefty taille_case l h mur_present = begin
-    open_graph " 900x900"; 
+    open_graph " 1000x1000"; 
     let doNothing = ref 0 in 
       for y = 0 to (l-1) do
         for x = 0 to (h-1) do
@@ -178,10 +178,10 @@ let trace_lab upleftx uplefty taille_case l h mur_present = begin
     end
 
 let () =  
-          (Labyrinthe.printerMurPresent !mur_p 10 10) ;
-          trace_lab 200 800 50 10 10 !mur_p;
-          trace_pacman 200 800 10 10 50;
-loop 10 10 
+         (* (Labyrinthe.printerMurPresent !mur_p 10 10) ;
+         *) trace_lab 1 999 25 30 30 !mur_p;
+          trace_pacman 1 999 30 30 25;
+loop 1 999 30 30 25
 
 
 
