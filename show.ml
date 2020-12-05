@@ -1,20 +1,51 @@
 open Graphics
 open Sys
 open Unix
+open Thread
 (* Graphics *)
 
 
-
-let mur_p = ref (Labyrinthe.gen_lab 10 10)
+let largeur = 10
+let hauteur = 10
+let mur_p = ref (Labyrinthe.gen_lab largeur hauteur)
 (* La case où le pacman est actuellement *)
 let case_pacman = ref 0
+let case_fantome = ref (largeur-1)
+
+ 
+(* trace le fantome par rapport à case_fantome *)
+let trace_fantome uplefty upleftx l h taille_case = 
+        let x = !case_fantome / l in
+        let y = !case_fantome mod l in
+        set_color blue;
+  fill_circle ((uplefty + ((taille_case* (y+1))))-(taille_case/2)) ((upleftx - ((taille_case*(x+1))))+(taille_case/2)) ((taille_case/2)-3)
+
+(* trace un rond blanc pour effacer l'emplacement précédent du fantome
+ * a mettre a jour avec le pathfinding *) 
+let white_fantome uplefty upleftx l h taille_case x_pacman y_pacman = 
+   let x = !case_fantome / l in 
+   let y = !case_fantome mod l in
+   set_color white;
+   if x_pacman = x then 
+      if y_pacman < y then
+      fill_circle ((uplefty + ((taille_case* (y+2))))-(taille_case/2)) ((upleftx - ((taille_case*(x+1))))+(taille_case/2)) ((taille_case/2)-3)
+      else 
+      fill_circle ((uplefty + ((taille_case* (y))))-(taille_case/2)) ((upleftx - ((taille_case*(x+1))))+(taille_case/2)) ((taille_case/2)-3)
+   else
+      if x_pacman < x then
+      fill_circle ((uplefty + ((taille_case* (y+1))))-(taille_case/2)) ((upleftx - ((taille_case*(x+2))))+(taille_case/2)) ((taille_case/2)-3)
+      else
+      fill_circle ((uplefty + ((taille_case* (y+1))))-(taille_case/2)) ((upleftx - ((taille_case*(x))))+(taille_case/2)) ((taille_case/2)-3);
+   fill_circle ((uplefty + ((taille_case* (y+1))))-(taille_case/2)) ((upleftx - ((taille_case*(x+2))))+(taille_case/2)) ((taille_case/2)-3);
+   fill_circle ((uplefty + ((taille_case* (y+1))))-(taille_case/2)) ((upleftx - ((taille_case*(x))))+(taille_case/2)) ((taille_case/2)-3)
+  
 
 
 (* trace le pacman par rapport à case_pacman *)
-let trace_pacman uplefty upleftx l h taille_case  = 
-  let x = !case_pacman / l in
-  let y = !case_pacman mod l in
-  set_color yellow;
+let trace_pacman uplefty upleftx l h taille_case = 
+        let x = !case_pacman / l in
+        let y = !case_pacman mod l in
+        set_color yellow;
   fill_circle ((uplefty + ((taille_case* (y+1))))-(taille_case/2)) ((upleftx - ((taille_case*(x+1))))+(taille_case/2)) ((taille_case/2)-3)
 
 
@@ -52,91 +83,128 @@ let rec exit_loop() =
   draw_string("Fin de la Partie");
   exit_loop() 
 
+
+(* Thread fantome *)
+let rec thread_fantome ()  = 
+  sleep 1;
+  (*nouvelle position fantome *)
+  (*mettre le pathfinding ici *)
+   let x = !case_fantome / largeur in 
+   let y = !case_fantome mod largeur in
+   let x_pacman = !case_pacman / largeur in
+   let y_pacman = !case_pacman mod largeur in
+   if x_pacman = x then 
+      if y_pacman < y then
+       case_fantome :=  !case_fantome -1
+      else
+       case_fantome :=  !case_fantome +1
+   else
+      if x_pacman < x then
+       case_fantome :=  !case_fantome - largeur
+      else
+       case_fantome := !case_fantome + largeur;
+ 
+(* mettre a jour l'affichage *)
+  white_fantome 200 800 10 10 50 x_pacman y_pacman;
+  trace_fantome 200 800 10 10 50;
+  (*test si le fantome est le pacman se touche *)
+  if !case_pacman = !case_fantome then begin
+     clear_graph();
+     exit_loop()
+  end
+  else     
+     thread_fantome ()
+
 (* Boucle infinie qui lance l'affichage + la lecture d'entrée clavier *) 
 let rec loop l h = 
- if !case_pacman = l*h-1 then begin
-   clear_graph();
-   winner_loop()
-   end
- else                
-   let c = read_key() in 
-   let x = !case_pacman / l in
-   let y = !case_pacman mod l in
-   (* dans l'ordre :
-         * - calcule la position du pacman après la pression d'une touche
-         * - efface l'ancien pacman 
-         * - affiche le nouveau pacman *)
-   match c with 
-     | w when w = 'z' ->  
-      if (x>0) then
-          if(!mur_p.(0).(x-1).(y) = false) then
-             begin
-             case_pacman := (y + l*(x-1)); 
-             white_pacman 200 800 10 10 50 c; 
-             trace_pacman 200 800 10 10 50 ; 
-             loop l h;
-             end
-          else  
-             begin
-              sound 12000 1000;
-              loop l h
-             end
-      else 
-          sound 12000 1000;
-          loop l h
-          
-     | w when w = 'q' ->  
-      if (y>0) then 
-        if(!mur_p.(1).(x).(y-1) = false) then begin
-           case_pacman := (y-1) + l*x;
-           white_pacman 200 800 10 10 50 c;
-           trace_pacman 200 800 10 10 50 ;
-           loop l h;
+ if !case_pacman = !case_fantome then begin 
+    clear_graph();
+    exit_loop()
+    end
+ else 
+         if !case_pacman = l*h-1 then begin
+           clear_graph();
+           winner_loop()
            end
-        else  
-           begin
-           sound 12000 100;
-           loop l h
-           end
-      else 
-        sound 12000 1000;
-        loop l h
-      
+         else                
+           let c = read_key() in 
+           let x = !case_pacman / l in
+           let y = !case_pacman mod l in
+           (* dans l'ordre :
+                 * - calcule la position du pacman après la pression d'une touche
+                 * - efface l'ancien pacman 
+                 * - affiche le nouveau pacman *)
+           match c with 
+             | w when w = 'z' ->  
+              if (x>0) then
+                  if(!mur_p.(0).(x-1).(y) = false) then
+                     begin
+                     case_pacman := (y + l*(x-1)); 
+                     white_pacman 200 800 10 10 50 c; 
+                     trace_pacman 200 800 10 10 50  ; 
+                     loop l h;
+                     end
+                  else  
+                     begin
+                      sound 12000 1000;
+                      loop l h
+                     end
+              else 
+                  sound 12000 1000;
+                  loop l h
+                  
+             | w when w = 'q' ->  
+              if (y>0) then 
+                if(!mur_p.(1).(x).(y-1) = false) then begin
+                   case_pacman := (y-1) + l*x;
+                   white_pacman 200 800 10 10 50 c;
+                   trace_pacman 200 800 10 10 50 ;
+                   loop l h;
+                   end
+                else  
+                   begin
+                   sound 12000 100;
+                   loop l h
+                   end
+              else 
+                sound 12000 1000;
+                loop l h
+              
 
-     | w when w = 'd' ->  if(!mur_p.(1).(x).(y) = false) then
-      begin
-      case_pacman := (y+1) + l*x;
-      white_pacman 200 800 10 10 50 c;
-      trace_pacman 200 800 10 10 50 ;
-      loop l h;
-      end
-      else
-          begin
-          sound 12000 1000; 
-          loop l h
-          end
-     | w when w = 's' -> if(!mur_p.(0).(x).(y) = false) then
-      begin
-      case_pacman := (y + l*(x+1));
-      white_pacman 200 800 10 10 50 c;
-      trace_pacman 200 800 10 10 50 ;
-      loop l h;
-      end
-      else 
-        begin
-          sound 12000 1000;
-          loop l h 
-        end
-     (* Quitte le jeu sans fermer la fenêtre (comme dans l'ennoncé) *) 
-     | w when w = 'e' -> clear_graph(); 
-                         exit_loop();
+             | w when w = 'd' ->  if(!mur_p.(1).(x).(y) = false) then
+              begin
+              case_pacman := (y+1) + l*x;
+              white_pacman 200 800 10 10 50 c;
+              trace_pacman 200 800 10 10 50 ;
+              loop l h;
+              end
+              else
+                  begin
+                  sound 12000 1000; 
+                  loop l h
+                  end
+             | w when w = 's' -> if(!mur_p.(0).(x).(y) = false) then
+              begin
+              case_pacman := (y + l*(x+1));
+              white_pacman 200 800 10 10 50 c;
+              trace_pacman 200 800 10 10 50  ;
+              loop l h;
+              end
+              else 
+                begin
+                  sound 12000 1000;
+                  loop l h 
+                end
+             (* Quitte le jeu sans fermer la fenêtre (comme dans l'ennoncé) *) 
+             | w when w = 'e' -> clear_graph(); 
+                                 exit_loop();
 
-     (* Permet de quitter le jeu *)
-     | w when w = 'n' -> case_pacman := !case_pacman
-   (*Empeche de crash si on appuie sur autre chose *)
-     | w -> loop l h 
+             (* Permet de quitter le jeu *)
+             | w when w = 'n' -> case_pacman := !case_pacman
+           (*Empeche de crash si on appuie sur autre chose *)
+             | w -> loop l h 
 
- 
+         
 
 
 (* 0 bug elle marche nickel, construit le pourtour du labyrinthe et affiche l'entrée et la sortie du labyrinthe*)
@@ -177,11 +245,15 @@ let trace_lab upleftx uplefty taille_case l h mur_present = begin
     trace_pourtour upleftx uplefty l h taille_case;
     end
 
+(* Lance le thread du fantome *)
+let _ = create thread_fantome()
+
 let () =  
-          (Labyrinthe.printerMurPresent !mur_p 10 10) ;
-          trace_lab 200 800 50 10 10 !mur_p;
-          trace_pacman 200 800 10 10 50;
-loop 10 10 
+  (Labyrinthe.printerMurPresent !mur_p largeur hauteur) ;
+  trace_lab 200 800 50 largeur hauteur !mur_p;
+  trace_pacman 200 800 largeur hauteur 50;
+  trace_fantome 200 800 10 10 50 ;
+loop largeur hauteur
 
 
 
