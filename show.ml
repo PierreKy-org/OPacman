@@ -11,8 +11,9 @@ let mur_p = ref (Labyrinthe.gen_lab largeur hauteur)
 (* La case où le pacman est actuellement *)
 let case_pacman = ref 0
 let case_fantome = ref (largeur-1)
-
- 
+(*perdu et gagner permette la communication entre les 2 threads *)
+let perdu = ref 0
+let gagner = ref 0 
 (* trace le fantome par rapport à case_fantome *)
 let trace_fantome uplefty upleftx l h taille_case = 
         let x = !case_fantome / l in
@@ -74,19 +75,23 @@ let rec winner_loop() =
   moveto 300 450;
   set_font "-*-fixed-medium-r-semicondensed--150-*-*-*-*-*-iso8859-1" ;
   draw_string("GAGNE");
-  winner_loop() 
-            
+  sleep 1
+
 let rec exit_loop() = 
   set_color black;
   moveto 50 450;
   set_font "-*-fixed-medium-r-semicondensed--100-*-*-*-*-*-iso8859-1" ;
   draw_string("Fin de la Partie");
-  exit_loop() 
+  sleep 1
 
 
 (* Thread fantome *)
 let rec thread_fantome ()  = 
-  sleep 1;
+   sleep 1;
+   (* ici condition pour voir si pacman est sorti du labyrinthe ou pas
+    * ca evite qu'une boule bleu pop sur l'ecran de victoire *)
+   if !gagner = 1 then begin print_string("je m'eteins :( \n")  end
+  else begin 
   (*nouvelle position fantome *)
   (*mettre le pathfinding ici *)
    let x = !case_fantome / largeur in 
@@ -105,29 +110,45 @@ let rec thread_fantome ()  =
        case_fantome := !case_fantome + largeur;
  
 (* mettre a jour l'affichage *)
-  white_fantome 200 800 10 10 50 x_pacman y_pacman;
-  trace_fantome 200 800 10 10 50;
+  white_fantome 200 800 largeur hauteur 50 x_pacman y_pacman;
+  trace_fantome 200 800 largeur hauteur 50;
   (*test si le fantome est le pacman se touche *)
   if !case_pacman = !case_fantome then begin
+     perdu := 1;
+     (* ici je met tout les murs sur chaque case car dans loop on s'arrete sur l'entrée clavier
+      * ca evite d'avoir une boule jaune apparaitre sur l'ecran de fin à cause d'un déplacement *)
+     mur_p := (Labyrinthe.initialise_mur_present largeur hauteur);
      clear_graph();
+     print_string("blip blop j'ai gagné \n");
      exit_loop()
   end
   else     
      thread_fantome ()
-
+  end
 (* Boucle infinie qui lance l'affichage + la lecture d'entrée clavier *) 
 let rec loop l h = 
- if !case_pacman = !case_fantome then begin 
-    clear_graph();
-    exit_loop()
-    end
- else 
+  (* Si le pacman rush dans le fantome  *)
+    if !case_pacman = !case_fantome then begin
+         clear_graph();
+         gagner := 1;
+         exit_loop()
+         end
+    else
+       (* si le pacman atteint la fin du labyrinthe *)
          if !case_pacman = l*h-1 then begin
            clear_graph();
+           gagner := 1;
            winner_loop()
            end
          else                
+           
            let c = read_key() in 
+           (* test si le fantome a touché pacman *) 
+           if !perdu = 1  then begin clear_graph(); exit_loop() end
+           else case_pacman := !case_pacman; 
+          
+           (* si il ne perd pas ou ne gagne pas alors on lit les entrées *)
+           
            let x = !case_pacman / l in
            let y = !case_pacman mod l in
            (* dans l'ordre :
@@ -203,7 +224,7 @@ let rec loop l h =
              | w when w = 'n' -> case_pacman := !case_pacman
            (*Empeche de crash si on appuie sur autre chose *)
              | w -> loop l h 
-
+           
          
 
 
@@ -252,7 +273,7 @@ let () =
   (Labyrinthe.printerMurPresent !mur_p largeur hauteur) ;
   trace_lab 200 800 50 largeur hauteur !mur_p;
   trace_pacman 200 800 largeur hauteur 50;
-  trace_fantome 200 800 10 10 50 ;
+  trace_fantome 200 800 largeur hauteur 50 ;
 loop largeur hauteur
 
 
