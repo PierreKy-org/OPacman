@@ -85,6 +85,103 @@ let rec exit_loop() =
   sleep 1
 
 
+(*----------------------------- Debut du code de la recherche en profondeur*)
+let caseVoisines case = 
+  (** int -> int Array 
+  Renvoie un tableau de toutes les cases accessibles en un pas depuis
+  la case "case". (càd : quand il n'y a aucun mur entre "case" et une case adjacente.)
+  Si une case n'est pas accessible (càd : il y'a un mur) alors le tableau
+  contiendra la valeur -1*)
+
+  let x = case / largeur in
+  let y = case mod largeur in
+  let doNothing = ref 0 in
+  let caseVoisine = Array.make 4 (-1) in
+
+  if x != 0 then 
+    if (!mur_p.(0).(x-1).(y)) = false
+      then Array.set caseVoisine 0 (y + largeur*(x-1)) (*haut*)
+      else doNothing := !doNothing;
+
+  if y != (largeur -1) then
+    if(!mur_p.(1).(x).(y)) = false 
+      then Array.set caseVoisine 1 ((y+1) + largeur*x)   (*droite*)
+      else doNothing := !doNothing;
+      
+  if y !=0 then
+    if(!mur_p.(1).(x).(y-1)) = false 
+      then Array.set caseVoisine 2 ((y-1) + largeur*x) (*gauche*)
+      else doNothing := !doNothing;
+
+  if x != (hauteur -1) then 
+    if(!mur_p.(0).(x).(y)) = false 
+      then Array.set caseVoisine 3 (y + largeur*(x+1)) (*bas*)
+      else doNothing := !doNothing;
+
+  caseVoisine
+  
+let caseVoisinesNonMarquee case caseMarquees  = 
+  (** int -> int Array -> int Array
+  Renvoie un tableau d'entier contenant toutes les cases voisines de 
+  "cases" qui n'ont pas encore été visitées (càd : qui ne sont pas 
+  dans déjà caseMarquees) *)
+
+  let  doNothing =  ref 0 in
+  let  casePossibles = ref [||] in  
+
+  if case < 0
+  then [||]
+  else begin
+  let  cv = (caseVoisines case) in 
+  for c=0 to ((Array.length cv)-1)  do
+    if (Array.mem (Array.get (cv) c) caseMarquees) = false
+    then casePossibles := Array.append !casePossibles [|(Array.get cv c)|]
+    else doNothing := !doNothing;
+  done;
+  !casePossibles
+  end
+
+let prochaine_case_fantome = ref (-1) (*Variable globale qui est modifiée uniquement part est_reliee, indique la case sur laquelle deplacer le fantome *)
+
+let rec est_reliee case caseMarquees caseDepart = 
+  (** int -> int Array -> int -> () 
+  Parcours les cases adjacentes accessibles et Non marquées jusqu'à trouver la case de pacman.
+  Lorsqu'un chemin est trouvé entre pacman et le fantome est_reliee affecte caseDepart à prochaine_case_fantome.
+  caseDepart est la valeur de la première case sur laquelle on a appelé est_reliee. 
+  Lorsque l'on ne trouve pas la case de Pacman on marque la case courrante afin de ne pas y
+  revenir par la suite (c'est fait dans CaseUpdate). 
+  Puis on rappelle est_reliee sur les cases adjacentes de cette case.
+  *)
+
+  let casePossible = (caseVoisinesNonMarquee case caseMarquees ) in 
+  if case = !case_pacman
+    then prochaine_case_fantome := caseDepart
+    else begin
+    let caseUpdate = (Array.append caseMarquees [|case|]) in 
+    for c = 0 to ((Array.length casePossible)-1) do
+        if case > 0
+          then est_reliee (Array.get casePossible c) caseUpdate caseDepart
+    done;
+    end
+
+let recherche () = 
+  (** () -> int
+  Initialise les caseMarquees, caseVoisine et CaseDepart
+  et appelle est_reliee sur les cases adjacentes au fantome.
+  Lorsque l'execution de recherche se termine, la valeur de prochaine_case_fantome 
+  aura forcément été modifiée par est_reliee, on la renvoie.
+  Recherche sert aussi à indiquer quels sont les cases adjacentes au fantome et
+  a initialiser les valeurs pour est_reliee *)
+
+  let caseMarquees =  [|!case_fantome|] in 
+  let cv = caseVoisines !case_fantome in 
+  for c=0 to ((Array.length cv)-1) do 
+  est_reliee ((Array.get cv c)) caseMarquees (Array.get cv c) ;
+  done;
+  !prochaine_case_fantome
+
+(*----------------------------- Fin du code de la recherche en profondeur*)
+
 (* Thread fantome *)
 let rec thread_fantome ()  = 
    sleep 1;
@@ -92,35 +189,21 @@ let rec thread_fantome ()  =
     * ca evite qu'une boule bleu pop sur l'ecran de victoire *)
    if !gagner = 1 then begin print_string("je m'eteins :( \n")  end
   else begin 
-  (*nouvelle position fantome *)
-  (*mettre le pathfinding ici *)
-   let x = !case_fantome / largeur in 
-   let y = !case_fantome mod largeur in
-   let x_pacman = !case_pacman / largeur in
-   let y_pacman = !case_pacman mod largeur in
-   if x_pacman = x then 
-      if y_pacman < y then
-       case_fantome :=  !case_fantome -1
-      else
-       case_fantome :=  !case_fantome +1
-   else
-      if x_pacman < x then
-       case_fantome :=  !case_fantome - largeur
-      else
-       case_fantome := !case_fantome + largeur;
- 
-(* mettre a jour l'affichage *)
-  white_fantome 200 800 largeur hauteur 50 x_pacman y_pacman;
-  trace_fantome 200 800 largeur hauteur 50;
-  (*test si le fantome est le pacman se touche *)
-  if !case_pacman = !case_fantome then begin
-     perdu := 1;
-     (* ici je met tout les murs sur chaque case car dans loop on s'arrete sur l'entrée clavier
-      * ca evite d'avoir une boule jaune apparaitre sur l'ecran de fin à cause d'un déplacement *)
-     mur_p := (Labyrinthe.initialise_mur_present largeur hauteur);
-     clear_graph();
-     print_string("blip blop j'ai gagné \n");
-     exit_loop()
+    let x_pacman = !case_pacman / largeur in
+    let y_pacman = !case_pacman mod largeur in
+    case_fantome := recherche ();               (*pathfinding*)
+
+    white_fantome 200 800 largeur hauteur 50 x_pacman y_pacman;
+    trace_fantome 200 800 largeur hauteur 50;
+    (*test si le fantome et le pacman se touchent *)
+    if !case_pacman = !case_fantome then begin
+      perdu := 1;
+      (* ici je met tout les murs sur chaque case car dans loop on s'arrete sur l'entrée clavier
+        * ca evite d'avoir une boule jaune apparaitre sur l'ecran de fin à cause d'un déplacement *)
+      mur_p := (Labyrinthe.initialise_mur_present largeur hauteur);
+      clear_graph();
+      print_string("blip blop j'ai gagné \n");
+      exit_loop()
   end
   else     
      thread_fantome ()
@@ -173,7 +256,8 @@ let rec loop l h =
               else 
                   sound 12000 1000;
                   loop l h
-                  
+
+
              | w when w = 'q' ->  
               if (y>0) then 
                 if(!mur_p.(1).(x).(y-1) = false) then begin
