@@ -20,7 +20,7 @@ https://lms.univ-cotedazur.fr/mod/url/view.php?id=189570
 ### Utilisation : 
 1. Télécharger le projet
 2. Extraire le projet
-3. ocamlc -I ~/.opam/default/lib/graphics  graphics.cma UF.ml labyrinthe.ml show.ml -o run.byte && ./run.byte
+3. ocamlc -thread -I ~/.opam/default/lib/graphics graphics.cma unix.cma threads.cma UF.ml labyrinthe.ml show.ml -o run.byte && ./run.byte
 
 ---
 
