@@ -1,36 +1,27 @@
 open Format
 
-  let case_adjacentesbis l h (d,x,y) = 
-  (** CASE ADJACENTES V2 l'algo calcule la position comme demande le prof
-   0 donne le trait horizontal et 1 le trait vertical
-   int  -> int -> (int,int,int) -> (int,int) *)
-    match (d,x,y) with 
-    | (w,x,y) when w  = 0 -> if x >= (l-1) then invalid_arg "limite du labyrinthe" else (y+l*x, ((y)+l*(x+1)))
-    | (w,_,_) -> if y >= (h-1) then invalid_arg "limite du labyrinthe" else (y+l*x, ((y+1)+l*(x)))
+let case_adjacentesbis l h (d,x,y) = 
+(** int -> int -> int * int * int -> int * int
+L'algo calcule la position. 0 donne le trait horizontal et 1 le trait vertical
+*)
+  match (d,x,y) with 
+  | (w,x,y) when w  = 0 -> if x >= (l-1) then invalid_arg "limite du labyrinthe" else (y+l*x, ((y)+l*(x+1)))
+  | (w,_,_) -> if y >= (h-1) then invalid_arg "limite du labyrinthe" else (y+l*x, ((y+1)+l*(x)))
 
+(*Fonctions pour manipuler des tuples *)
 let getTuple2First (a,b)= a 
 let getTuple2Second (a,b) =  b
 let getTuple3First (a,b,c) = a
 let getTuple3Second (a,b,c) = b
 let getTuple3Last (a,b,c) = c
 
-let printerMurPresent t l h = 
-  for d=0 to 1 do 
-    for x=0 to l-1 do
-      for y=0 to h-1 do
-        printf "%b " (t.(d).(x).(y));
-      done;
-        printf "\n"
-    done;
-    printf "\n"
-  done;
-  printf "fin\n"
-
-
 let initialise_mur_present l h = 
   Array.init 2 (fun _ -> (Array.init l (fun _ -> Array.make h true)))
 
-let mur_au_hasard l h =(* renvoie un triplet (d, x, y) *)
+let mur_au_hasard l h =
+  (**int -> int -> int * int * int
+  renvoie un triplet (d, x, y)
+  *)
   let n = Random.self_init (); Random.int ((l-1) * h + l * (h-1)) in
   if n < (l-1) * h
     then begin
@@ -41,6 +32,12 @@ let mur_au_hasard l h =(* renvoie un triplet (d, x, y) *)
     (0, n2 mod (l-1), n2 / (l-1))
 
 let gen_lab l h = 
+  (* int -> int -> bool bool bool Array
+  Creer un labyrinthe de dimension l h sous forme de tableau de tableau de tableau de booleans.
+  Le premier tableau correspond à d  -> debout ou allongé
+  Le deuxieme tableau correspond à x
+  Le dernier tableau correspond aux y
+  *)
   let mur_present = ref (initialise_mur_present l h) in 
   let uf = ref (UF.create (l*h)) in
   let dxy = ref (0,0,0) in
@@ -62,6 +59,20 @@ let gen_lab l h =
   done;
   !mur_present
 
+let printerMurPresent t l h = 
+  (**int -> int -> int  
+  Uniquement pour debugger.
+  *)
+  for d=0 to 1 do 
+    for x=0 to l-1 do
+      for y=0 to h-1 do
+        printf "%b " (t.(d).(x).(y));
+      done;
+        printf "\n"
+    done;
+    printf "\n"
+  done;
+  printf "fin\n"
 
 (* --------------------------------Partie Tests-------------------------------- *)
 

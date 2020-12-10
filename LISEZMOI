@@ -1,0 +1,9 @@
+Voici notre projet pour le cours de Programmation fonctionnelle de La l3 2020-2021
+
+UTILISATION : 
+
+    Vous pouvez compiler le projet grâce à la commande 
+
+        ocamlc -thread -I ~/.opam/default/lib/graphics graphics.cma unix.cma threads.cma UF.ml labyrinthe.ml show.ml -o run.byte && ./run.byte 
+
+

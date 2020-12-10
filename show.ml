@@ -5,28 +5,36 @@ open Thread
 
 
 (*----------------------------- variables globales *)
+
+(*  Variables d'affichage du labyrinthe *)
 let largeur = 10
 let hauteur = 10
 let taille_par_case = 50
 let mur_p = ref (Labyrinthe.gen_lab largeur hauteur)
+
 (* La case où le pacman est actuellement *)
 let case_pacman = ref 0
 let case_fantome = ref (largeur-1)
+
 (*perdu et gagner permettent la communication entre les 2 threads *)
 let perdu = ref 0
 let gagner = ref 0 
 
 
-(*----------------------------- affichage du fantome
-* trace le fantome par rapport à case_fantome *)
+(*----------------------------- affichage du fantome*)
 let trace_fantome uplefty upleftx l h taille_case = 
+  (**int -> int -> int -> int -> int -> ()
+  trace le fantome par rapport à case_fantome
+   *)
    let x = !case_fantome / l in
    let y = !case_fantome mod l in
    set_color blue;
    fill_circle ((uplefty + ((taille_case* (y+1))))-(taille_case/2)) ((upleftx - ((taille_case*(x+1))))+(taille_case/2)) ((taille_case/2)-3)
 
-(* trace un rond blanc pour effacer l'emplacement précédent du fantome *) 
 let white_fantome uplefty upleftx l h taille_case precedente_case_fantome = 
+  (**int -> int -> int -> int -> int -> int -> ()
+  trace un rond blanc pour effacer l'emplacement précédent de fantome
+   *)
    let x_pre = precedente_case_fantome / l in
    let y_pre = precedente_case_fantome mod l in
    set_color white;
@@ -34,17 +42,22 @@ let white_fantome uplefty upleftx l h taille_case precedente_case_fantome =
   
 
 
-(*----------------------------- affichage du pacman
- * trace le pacman par rapport à case_pacman *)
+(*----------------------------- affichage du pacman*)
+
 let trace_pacman uplefty upleftx l h taille_case = 
+  (**int -> int -> int -> int -> int -> ()
+  trace le pacman par rapport à case_pacman
+   *)
    let x = !case_pacman / l in
    let y = !case_pacman mod l in
    set_color yellow;
    fill_circle ((uplefty + ((taille_case* (y+1))))-(taille_case/2)) ((upleftx - ((taille_case*(x+1))))+(taille_case/2)) ((taille_case/2)-3)
 
 
-(* trace un rond blanc pour effacer l'emplacement précédent de pacman *) 
 let white_pacman uplefty upleftx l h taille_case c = 
+  (**int -> int -> int -> int -> int -> int -> ()
+  trace un rond blanc pour effacer l'emplacement précédent de pacman
+   *)
    let x = !case_pacman / l in 
    let y = !case_pacman mod l in
    set_color white;
@@ -203,6 +216,8 @@ let rec thread_fantome ()  =
 
 (*----------------------------- Boucle principale + pacman*)
 let fct_graphique_pacman l h c =
+    (**int -> int -> int -> ()
+    efface le dessin à l'ancienne position de pacman puis redessine pacman sur une autre case. *)
     white_pacman 200 800 l h taille_par_case c;
     trace_pacman 200 800 l h taille_par_case 
  
@@ -279,8 +294,10 @@ let rec loop l h =
 
 (*----------------------------- Affichage du labyrinthe*)
 
-(* 0 bug elle marche nickel, construit le pourtour du labyrinthe et affiche l'entrée et la sortie du labyrinthe*)
 let trace_pourtour upleftx uplefty l h taille_case = begin 
+  (**int -> int -> int -> int -> int -> () 
+  Dessine le contour du labyrinthe et enlève un mur pour la sortie et l'entrée
+  *)
   set_color black; 
   draw_rect (upleftx) ((uplefty-((taille_case*h)))) (taille_case*l)  (taille_case*h) ;
   moveto (upleftx) (uplefty);
@@ -291,8 +308,13 @@ let trace_pourtour upleftx uplefty l h taille_case = begin
   end
 
 
-(* Parfait, elle fait son taff, construit le mur demander dans le labyrinthe *)
 let trace_mur uplefty upleftx taille_case (d,x,y) = 
+    (** int -> int -> int -> int * int * int -> () 
+    Dessine un mur de taille taille_case à l'indice x y.
+    d = 0 -> le mur est debout
+    d = 1 -> le mur est allongé 
+    *)
+
     moveto (uplefty + (taille_case* (y+1))) (upleftx - (taille_case*(x+1)));
     if d = 1 then
        lineto (uplefty + (taille_case* (y+1))) (upleftx - (taille_case*(x))) 
@@ -300,8 +322,10 @@ let trace_mur uplefty upleftx taille_case (d,x,y) =
        lineto (uplefty + (taille_case* (y))) (upleftx - (taille_case*(x+1)))
 
 
-(* Début de trace_lab, trace le labyrinthe en suivant la matrice de mur, trace d'abord les murs puis le pourtour *)
 let trace_lab upleftx uplefty taille_case l h mur_present = begin
+    (**  int -> int -> int -> int -> int -> int int int Array -> ()
+    Dessine le labyrinthe en suivant la matrice mur_present, dessine d'abord les murs puis le pourtour. 
+    *)
     open_graph " 900x900"; 
     for y = 0 to (l-1) do
       for x = 0 to (h-1) do
