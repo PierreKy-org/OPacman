@@ -77,8 +77,7 @@ let white_pacman uplefty upleftx l h taille_case c =
 
 
 (*----------------------------- Image de victoire et de fin de partie
- * Boucle infinie pour afficher le mot "gagné"
- * On peut mettre un read_key() pour sortir du programme proprement *)
+ * Boucle infinie pour afficher le mot "gagné" *)
 let rec winner_loop() =
    set_color black;
    moveto 300 450;
