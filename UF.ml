@@ -10,7 +10,7 @@
     Gérer Bug dans Union, on ne renvoit                         DONE
       pas toute les compo après union                          
     Gérer le cas où on fait union de 2 cases de même classes    DONE
-->  Refaire tout uf pour avoir la bonne structure ???           DONE ?????
+->  Refaire tout uf pour avoir la bonne structure ???           DONE 
 *)
 
 type 't uf = 't array
