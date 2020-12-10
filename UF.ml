@@ -50,7 +50,6 @@ let find uf a =
   done;
   !rac
 
-
 let fusion uf n m = 
   (** uf -> int -> int -> composante_Connexe
   La classe d'une case est un int array

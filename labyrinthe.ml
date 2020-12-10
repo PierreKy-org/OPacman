@@ -1,13 +1,4 @@
-(*
-TODO : 
-    Donner un seed au générateur aléatoire.
-->  Tracer le pourtour du labyrinthe.           IN PROGRESS
-    Tracer les murs du labyrinthe.
-    Tracer LE labyrinthe.
-  *)
-open Graphics
 open Format
-
 
   let case_adjacentesbis l h (d,x,y) = 
   (** CASE ADJACENTES V2 l'algo calcule la position comme demande le prof
@@ -42,9 +33,9 @@ let initialise_mur_present l h =
 let mur_au_hasard l h =(* renvoie un triplet (d, x, y) *)
   let n = Random.self_init (); Random.int ((l-1) * h + l * (h-1)) in
   if n < (l-1) * h
-  then (0, n mod (l-1), n / (l-1))
+    then (0, n mod (l-1), n / (l-1))
   else
-  let n2 = n - (l-1) * h in
+    let n2 = n - (l-1) * h in
     (1, n2 mod l, n2 / l)
 
 let gen_lab l h = 
@@ -58,9 +49,8 @@ let gen_lab l h =
     dxy := (mur_au_hasard l h);
     ij := case_adjacentesbis l h !dxy;
     if (UF.find !uf (getTuple2First !ij)) = (UF.find !uf (getTuple2Second !ij))
-    then begin  
-
-      incrementeur := !incrementeur
+      then begin  
+       incrementeur := !incrementeur
       end
     else begin 
       uf := (UF.union !uf (getTuple2First !ij) (getTuple2Second !ij));
