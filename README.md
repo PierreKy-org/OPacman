@@ -1,11 +1,9 @@
-# [Projet Ocaml](https://github.com/L3-Info-Miage-Universite-Cote-D-Azur/projetinfo-2019-stoneage-sad)
-
+# [Projet Ocaml](https://github.com/Zorrino/OPacman)
 
 > Repository for the L3 Project in Functionnal Programming
 
 
-[![Release](https://img.shields.io/badge/Current_Release-None-blue.svg)](https://github.com/L3-Info-Miage-Universite-Cote-D-Azur/projetinfo-2019-stoneage-sad/releases/latest)
-[![Java](https://img.shields.io/badge/Ocaml-4.07.0-orange.svg?logo=ocaml&logoColor=orange)](https://www.oracle.com/technetwork/java/javase/downloads/jdk11-downloads-5066655.html)
+[![Ocaml](https://img.shields.io/badge/Ocaml-4.07.0-orange.svg?logo=ocaml&logoColor=orange)](https://ocaml.org/docs/install.fr.html)
 
 ## Description
 >Le projet a pour but la réalisation d'un petit jeu de Pacman en Ocaml.
@@ -20,12 +18,13 @@ https://lms.univ-cotedazur.fr/mod/url/view.php?id=189570
 ### Utilisation : 
 1. Télécharger le projet
 2. Extraire le projet
-3. ocamlc -thread -I ~/.opam/default/lib/graphics graphics.cma unix.cma threads.cma UF.ml labyrinthe.ml show.ml -o run.byte && ./run.byte
+3. Run :  
+`ocamlc -thread -I ~/.opam/default/lib/graphics graphics.cma unix.cma threads.cma UF.ml labyrinthe.ml show.ml -o run.byte && ./run.byte`
 
 ---
 
-[![Version](https://img.shields.io/badge/Etape-1-blue.svg?style=for-the-badge&logo=appveyor)](https://github.com/L3-Info-Miage-Universite-Cote-D-Azur/projetinfo-2019-stoneage-sad/milestone/1)
-![Deadline](https://img.shields.io/badge/DEADLINE-30/11/2020-green.svg?style=for-the-badge&logo=codeforces)
+![Version](https://img.shields.io/badge/Etape-1-blue.svg?style=for-the-badge&logo=appveyor)
+![Deadline](https://img.shields.io/badge/DEADLINE-30/11/2020-7dcca0.svg?style=for-the-badge&logo=codeforces)
 #### Afficher le Labyrinthe
 ***Les enjeux de cette partie sont :***
 * La représentation des données.
@@ -41,8 +40,8 @@ Puis afficher le labyrinthe ainsi obtenu grâce à la librairie Graphics d'Ocaml
 
 ---
 
-[![Version](https://img.shields.io/badge/ETAPE-2-2578B0.svg?style=for-the-badge&logo=appveyor)]()
-![Deadline](https://img.shields.io/badge/DEADLINE-06/12/2020-green.svg?style=for-the-badge&logo=codeforces)
+![Version](https://img.shields.io/badge/ETAPE-2-2578B0.svg?style=for-the-badge&logo=appveyor)
+![Deadline](https://img.shields.io/badge/DEADLINE-06/12/2020-4ea658.svg?style=for-the-badge&logo=codeforces)
 #### Interaction Utilisateur
 ***Fonctionnalités attendues :***
 * Afficher un Pacman
@@ -59,8 +58,8 @@ Si le pacman atteint la fin du labyrinthe le joueur gagne. (il faut donc déterm
 que le pacman l'atteigne.)
 
 ---
-[![Version](https://img.shields.io/badge/Etape-3-blue.svg?style=for-the-badge&logo=appveyor)]()
-![Deadline](https://img.shields.io/badge/DEADLINE-13/12/2020-blue.svg?style=for-the-badge&logo=codeforces)
+![Version](https://img.shields.io/badge/Etape-3-blue.svg?style=for-the-badge&logo=appveyor)
+![Deadline](https://img.shields.io/badge/DEADLINE-13/12/2020-008000.svg?style=for-the-badge&logo=codeforces)
 #### Fantôme
 ***Fonctionnalités attendues :***
 * Afficher un fantôme
