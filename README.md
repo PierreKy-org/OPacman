@@ -23,7 +23,7 @@ https://lms.univ-cotedazur.fr/mod/url/view.php?id=189570
 
 ---
 
-[![Version](https://img.shields.io/badge/Etape-1-blue.svg?style=for-the-badge&logo=appveyor)]
+![Version](https://img.shields.io/badge/Etape-1-blue.svg?style=for-the-badge&logo=appveyor)
 ![Deadline](https://img.shields.io/badge/DEADLINE-30/11/2020-7dcca0.svg?style=for-the-badge&logo=codeforces)
 #### Afficher le Labyrinthe
 ***Les enjeux de cette partie sont :***
@@ -40,7 +40,7 @@ Puis afficher le labyrinthe ainsi obtenu grâce à la librairie Graphics d'Ocaml
 
 ---
 
-[![Version](https://img.shields.io/badge/ETAPE-2-2578B0.svg?style=for-the-badge&logo=appveyor)]
+![Version](https://img.shields.io/badge/ETAPE-2-2578B0.svg?style=for-the-badge&logo=appveyor)
 ![Deadline](https://img.shields.io/badge/DEADLINE-06/12/2020-4ea658.svg?style=for-the-badge&logo=codeforces)
 #### Interaction Utilisateur
 ***Fonctionnalités attendues :***
@@ -58,7 +58,7 @@ Si le pacman atteint la fin du labyrinthe le joueur gagne. (il faut donc déterm
 que le pacman l'atteigne.)
 
 ---
-[![Version](https://img.shields.io/badge/Etape-3-blue.svg?style=for-the-badge&logo=appveyor)]
+![Version](https://img.shields.io/badge/Etape-3-blue.svg?style=for-the-badge&logo=appveyor)
 ![Deadline](https://img.shields.io/badge/DEADLINE-13/12/2020-008000.svg?style=for-the-badge&logo=codeforces)
 #### Fantôme
 ***Fonctionnalités attendues :***
